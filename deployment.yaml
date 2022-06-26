@@ -7,7 +7,7 @@ spec:
   selector:
     matchLabels:
       app: mindbox-app
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -23,10 +23,37 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "200m"
+        # Переменные окружения 
+        # Ожидается что приложению понадобятся какие-либо переменные/конфиги для работы
+        # Поэтому были добавлены обращения к сущностям ConfigMap и Secret
+        # secretRef - чувствительные данные/переменные (пароли, токены, логины)
+        # сonfigMapRef - специфичные для окружения переменные (хост, порт, бд и т.д.)
         envFrom:
           - secretRef:
-              name: mindbox-app-secret
+              name: mindbox-app-secret 
           - configMapRef: 
               name: mindbox-app-config
         ports:
         - containerPort: <Port>
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: mindbox-app
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: mindbox-app
+  minReplicas: 1
+  # Согласно НТ 4 пода достаточно для работы на пиковой нагрузке
+  maxReplicas: 4
+  metrics:
+  - type: Resource
+    # Было принято скейлится по CPU, так как приложение 
+    # стабильно работает с памятью и использует "ровно" 128M
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
