@@ -1,0 +1,32 @@
+---
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: mindbox-app
+spec:
+  selector:
+    matchLabels:
+      app: mindbox-app
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: mindbox-app
+    spec:
+      containers:
+      - name: mindbox-app
+        image: <Image>
+        resources:
+          request: 
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        envFrom:
+          - secretRef:
+              name: mindbox-app-secret
+          - configMapRef: 
+              name: mindbox-app-config
+        ports:
+        - containerPort: <Port>
