@@ -15,11 +15,12 @@ spec:
     spec:
       containers:
       - name: mindbox-app
-        image: <Image>
+        image: <repo-with-mindbox-app-image>
         resources:
           request: 
             memory: "128Mi"
             cpu: "100m"
+          # Лимит указан с запасом так как с на первые запросы приложению может потребоваться больше ресурсов
           limits:
             memory: "128Mi"
             cpu: "200m"
