@@ -1,1 +1,1 @@
-# test-for-mindbox
+# test-for-KTS
