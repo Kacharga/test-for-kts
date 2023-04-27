@@ -2,20 +2,20 @@
 apiVersion: v1
 kind: Deployment
 metadata:
-  name: mindbox-app
+  name: kts-app
 spec:
   selector:
     matchLabels:
-      app: mindbox-app
+      app: kts-app
   replicas: 1
   template:
     metadata:
       labels:
-        app: mindbox-app
+        app: kts-app
     spec:
       containers:
-      - name: mindbox-app
-        image: <repo-with-mindbox-app-image>
+      - name: kts-app
+        image: <repo-with-kts-app-image>
         resources:
           request: 
             memory: "128Mi"
@@ -31,9 +31,9 @@ spec:
         # сonfigMapRef - специфичные для окружения переменные (хост, порт, бд и т.д.)
         envFrom:
           - secretRef:
-              name: mindbox-app-secret 
+              name: kts-app-secret 
           - configMapRef: 
-              name: mindbox-app-config
+              name: kts-app-config
         ports:
         - containerPort: <Port>
           protocol: TCP
@@ -63,12 +63,12 @@ spec:
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: mindbox-app
+  name: kts-app
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: mindbox-app
+    name: kts-app
   minReplicas: 1
   # Согласно НТ 4 пода достаточно для работы на пиковой нагрузке
   maxReplicas: 4
