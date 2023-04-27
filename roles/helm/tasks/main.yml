@@ -1,0 +1,43 @@
+---
+- name: check /usr/bin/helm exist
+  stat:
+    path: "/usr/bin/helm"
+  register: exist_helm
+
+- name: download archive https://get.helm.sh/helm-{{ helm__version }}-linux-amd64.tar.gz
+  get_url:
+    url: "{{ helm__url }}"
+    dest: /tmp
+    mode: u=rw,g=r,o=r
+    owner: root
+    group: root
+  when: not exist_helm.stat.exists
+
+- name: unarchive helm
+  unarchive:
+    src: /tmp/helm-{{ helm__version }}-linux-amd64.tar.gz
+    dest: /tmp
+    owner: root
+    group: root
+    remote_src: yes
+    mode: u=rw,g=r,o=r
+  when: not exist_helm.stat.exists
+
+- name: copy helm binary
+  copy:
+    src: /tmp/linux-amd64/helm
+    dest: "{{ helm__bin_dir }}"
+    mode: u=rwx,g=rx,o=rx
+    owner: root
+    group: root
+    remote_src: yes
+  when: not exist_helm.stat.exists
+
+- name: clean
+  file:
+    state: absent
+    path: "{{ item }}"
+  with_items:
+    - /tmp/linux-amd64
+    - /tmp/helm-{{ helm__version }}-linux-amd64.tar.gz
+  when: not exist_helm.stat.exists

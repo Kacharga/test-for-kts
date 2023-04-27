@@ -1,0 +1,5 @@
+---
+
+helm__version: v3.6.2
+helm__url: https://get.helm.sh/helm-{{ helm__version }}-linux-amd64.tar.gz
+helm__bin_dir: /usr/bin
