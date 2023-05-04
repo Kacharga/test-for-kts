@@ -1,4 +1,0 @@
-- name: Read definition template file from the Ansible controller file system
-  kubernetes.core.k8s:
-    state: present
-    template: '/testing/deployment.j2'

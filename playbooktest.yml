@@ -1,0 +1,5 @@
+---
+- name: test launch
+  hosts: kubernetes
+  roles:
+    - role: testfolder

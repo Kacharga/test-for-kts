@@ -1,0 +1,8 @@
+- name: Copy requirements
+  copy: 
+    src: files/requirements.txt
+    dest: ~/files/requirements.txt
+ 
+- name: install python dependencies
+  pip:
+    requirements: ~/files/requirements.txt

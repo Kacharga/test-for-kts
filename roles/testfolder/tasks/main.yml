@@ -1,0 +1,11 @@
+---
+- name: create folder
+  ansible.builtin.file:
+    path: /home/ansible/testansible
+    state: directory
+    mode: '755'
+
+- name: create new file from template
+  template:
+    src: "templates/hello.j2"
+    dest: /home/ansible/testansible/hello.txt

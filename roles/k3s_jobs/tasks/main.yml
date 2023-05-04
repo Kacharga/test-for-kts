@@ -1,0 +1,12 @@
+- name: copy files
+  copy:
+    src: "files/{{ item }}"
+    dest: "~/files/{{ item }}"
+  with_items:
+    - init_db.sql
+    - job.yml
+
+- name: launch job
+  kubernetes.core.k8s:
+    state: present
+    src: files/job.yml

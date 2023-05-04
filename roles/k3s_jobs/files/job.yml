@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: postgresql
+  name: init-database
+spec:
+  template:
+    spec:
+      volumes:
+        - name: test-volume
+          configMap:
+            name: init-db
+      containers:
+        - name: init-database
+          image: docker.io/bitnami/postgresql:14.2.0-debian-10-r22
+          env:
+          - name: PGPASSWORD
+            value: "WoBEGL7lvz"
+ ##         command: ["psql --host my-release-postgresql -U postgres -d WoBEGL7lvz -p 5432 -f /tmp/init_db.sql"]
+          command: ["/bin/bash"]
+          args:
+            - "-c"
+            - "psql --host=my-release-postgresql -U postgres -d postgres -p 5432 -f ~/init_db.sql"
+          volumeMounts:
+          - name: test-volume
+            mountPath: /etc/config/
+      restartPolicy: Never
+  backoffLimit: 4

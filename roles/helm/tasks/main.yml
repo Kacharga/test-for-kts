@@ -5,6 +5,7 @@
   register: exist_helm
 
 - name: download archive https://get.helm.sh/helm-{{ helm__version }}-linux-amd64.tar.gz
+  become: true
   get_url:
     url: "{{ helm__url }}"
     dest: /tmp
@@ -14,6 +15,7 @@
   when: not exist_helm.stat.exists
 
 - name: unarchive helm
+  become: true
   unarchive:
     src: /tmp/helm-{{ helm__version }}-linux-amd64.tar.gz
     dest: /tmp
@@ -24,6 +26,7 @@
   when: not exist_helm.stat.exists
 
 - name: copy helm binary
+  become: true
   copy:
     src: /tmp/linux-amd64/helm
     dest: "{{ helm__bin_dir }}"
@@ -34,6 +37,7 @@
   when: not exist_helm.stat.exists
 
 - name: clean
+  become: true
   file:
     state: absent
     path: "{{ item }}"

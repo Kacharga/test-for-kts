@@ -1,0 +1,8 @@
+---
+- name: helm install
+  hosts: kubernetes
+  roles: 
+    - role: prepare
+    - role: helm 
+    - role: helm_deploy
+    - role: k3s_jobs
